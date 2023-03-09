@@ -12,6 +12,7 @@ export default function AuthRequired(req: Request, res: Response, next: NextFunc
 	if(!jwt)
 		return res.status(403).send({respCode: "AUTH_REQUIRED"});
 	try{
+		//@ts-ignore
 		const data = verify(jwt, "secret");
 		let user = data.person;
 		user.createdAt = new Date(user.createdAt);

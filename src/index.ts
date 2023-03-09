@@ -2,7 +2,13 @@ import express from "express";
 import cors from "cors";
 import AuthRouter from "./routers/auth";
 import CertificatesRouter from "./routers/certificates";
-import AuthRequired from "./middlewares/auth";
+
+const isProduction = process.env["production"];
+
+if(!process.env["DATABASE_URL"]){
+	console.error("DATABASE_URL env variable required.");
+	process.exit(1);
+}
 
 const app = express();
 app.use(express.json());
@@ -13,4 +19,5 @@ app.get("/", (req, res) => {
 	res.send("Hello world");
 });
 
-app.listen(8080);
+const port = isProduction ? 80 : 8080;
+app.listen(port, () => {console.log(`Service running on PORT ${port}`)});
