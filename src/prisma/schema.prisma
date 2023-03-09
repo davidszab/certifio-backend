@@ -1,0 +1,78 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model AuthKey {
+  id          Int      @id @default(autoincrement())
+  personId    Int?
+  tokenHash   String   @db.VarChar(255)
+  codeHash    String   @db.VarChar(255)
+  createdAt   DateTime @db.DateTime(0)
+  hasBeenUsed Boolean  @default(false)
+  person      Person?  @relation(fields: [personId], references: [id], map: "fk_authkeys_people")
+
+  @@index([personId], map: "personId")
+  @@map("auth_keys")
+}
+
+model Person {
+  id           Int           @id @default(autoincrement())
+  firstName    String        @db.VarChar(255)
+  lastName     String        @db.VarChar(255)
+  email        String        @unique(map: "email") @db.VarChar(255)
+  isAdmin      Boolean       @default(false)
+  createdAt    DateTime      @db.DateTime(0)
+  updatedAt    DateTime      @db.DateTime(0)
+  authKeys     AuthKey[]
+  certificates Certificate[]
+
+  @@map("people")
+}
+
+model Signature {
+  id      Int      @id @default(autoincrement())
+  name    String   @db.VarChar(50)
+  title   String?  @db.VarChar(100)
+  img     String?  @db.VarChar(50)
+  signers Signer[]
+
+  @@map("signatures")
+}
+
+model CertificateBase {
+  id           Int           @id @default(autoincrement())
+  name         String
+  title        String
+  template     String
+  signers      Signer[]
+  certificates Certificate[]
+
+  @@map("certificate_bases")
+}
+
+model Signer {
+  certificateBaseId Int
+  signatureId       Int
+  no                Int
+  certificateBase   CertificateBase @relation(fields: [certificateBaseId], references: [id], onUpdate: Restrict, map: "FK_signers_certificate_bases")
+  signature         Signature       @relation(fields: [signatureId], references: [id], onUpdate: Restrict, map: "FK_signers_signatures")
+
+  @@id([certificateBaseId, signatureId])
+  @@map("signers")
+}
+
+model Certificate {
+  id                String          @id
+  date              DateTime
+  base              CertificateBase @relation(fields: [certificateBaseId], references: [id])
+  certificateBaseId Int
+  person            Person          @relation(fields: [personId], references: [id])
+  personId          Int
+
+  @@map("certificates")
+}
