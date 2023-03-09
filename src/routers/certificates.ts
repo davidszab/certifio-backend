@@ -8,7 +8,7 @@ const prisma = new PrismaClient();
 
 router.get("/", AuthRequired, async (req, res) => {
 	const certificates = await prisma.certificate.findMany({where: {personId: req.user?.id}, include: {base: true}})
-	const results = certificates.map((e) => {
+	const results = certificates.map((e: any) => {
 		return {
 			id: e.id,
 			title: e.base.title,
@@ -33,7 +33,7 @@ router.get("/:id", async (req, res) => {
 			title: certificate.base.title,
 			date: certificate.date.toLocaleDateString("hu")
 		},
-		signatures: certificate.base.signers.map((e) => {
+		signatures: certificate.base.signers.map((e: any) => {
 			return {order: e.no, ...e.signature}
 		})
 	}
