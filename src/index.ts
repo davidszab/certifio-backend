@@ -2,13 +2,10 @@ import express from "express";
 import cors from "cors";
 import AuthRouter from "./routers/auth";
 import CertificatesRouter from "./routers/certificates";
+import { checkEnv } from "./lib/check-env";
 
 const isProduction = process.env["production"];
-
-if(!process.env["DATABASE_URL"]){
-	console.error("DATABASE_URL env variable required.");
-	process.exit(1);
-}
+checkEnv();
 
 const app = express();
 app.use(express.json());

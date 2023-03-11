@@ -1,0 +1,63 @@
+<html lang="hu">
+
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<style>
+			* { box-sizing: border-box; } body { margin: 0; font-family: sans-serif;
+			background-color: rgb(0, 21, 41); } .content { background-color: white;
+			min-height: 100vh; max-width: 750px; padding: 1rem 3rem; margin: 0 auto;
+			box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px
+			2px 6px 2px; } p { text-align: justify; } .greeting { font-weight: bold;
+			margin-bottom: 2rem; } .box { padding: 0.5rem 2rem; border-radius: 5px;
+			margin: 1.5rem 0; } .info { border: 1px solid rgb(142, 202, 255);
+			background-color: rgb(230, 244, 250); } .warning { background-color: #fffbe6;
+			border: #ffe58f 2px solid; } footer { margin-top: 3rem; border-top: 1px solid
+			black; }
+		</style>
+	</head>
+	<body>
+		<div class="content">
+			<div>
+				<p class="greeting">Tisztelt {{name}}!</p>
+				<p>A(z)
+					<b>{{owner}}</b>
+					által üzemeltetett Certifio rendszerben azonosítási folyamatot
+					indítottak el az Ön email-címével. A folyamat befejezéséhez kövesse az
+					alábbi lépéseket! Amennyiben nem Ön kezdeményezte az azonosítást, akkor
+					hagyja figyelmen kívül ezt a levelet!
+					<b>Az itt lévő információkat semmilyen esetben sem továbbítsa
+						másoknak!</b></p>
+				<div class="info box">
+					<p>Ha
+						<b>ezen az eszközö</b>n szeretné elvégezni az azonosítás, akkor
+						kattintson az alábbi hivatkozásra!
+						<br />
+						<b><a href="{{magicLink}}" target="_blank">Azonosítás ezen az
+								eszközön.</a></b>
+
+					</p>
+					<p>Amennyiben egy
+						<b>másik eszközön</b>, használja az alábbi négyjegyű kódot!
+						<br /><b>{{code}}</b></p>
+				</div>
+				<div class="warning box">
+					<p>Ez az üzenet
+						<b>egyszeri</b>
+						azonosítás tesz lehetővé, a folyamat megkezdésétől számított
+						<b>10 percen belül</b>.</p>
+				</div>
+				<i>
+					<p>Üdvözlettel:<br />
+						Certifio ({{owner}})</p>
+				</i>
+			</div>
+			<footer>
+				<p>Ez egy automatikusan generált levél, amelyet azért küldtünk Önnek, mert
+					egy azonosítási folyamatot indítottak az Ön email-címével!
+					Kérdés esetén keresse fel az oldal üzemeltetőjét!</p>
+			</footer>
+		</div>
+	</body>
+</html>

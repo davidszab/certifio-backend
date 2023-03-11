@@ -26,6 +26,7 @@ router.post("/start", async (req, res) => {
 	try{
 		await sendAuthenticationEmail(email, `${person.lastName} ${person.firstName}`, authKey.code, authKey.token);
 	}catch(err){
+		console.log(err);
 		return res.status(500).send({respCode: "SENDING_FAILURE"})
 	}
 	return res.status(200).send({respCode: "EMAIL_SENT"});

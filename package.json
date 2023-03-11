@@ -4,21 +4,24 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "npx tsc",
+    "build": "npx tsc && cpx \"./src/email-templates/**/*\" ./dist/email-templates --clean",
     "start": "node dist/index.js",
-    "dev": "npx concurrently \"npx tsc --watch\" \"npx nodemon -q dist/index.js\""
+    "dev": "npx concurrently \"npx tsc --watch\" \"cpx \"./src/email-templates/**/*\" ./dist/email-templates --clean\" \"npx nodemon -q dist/index.js\""
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@aws-sdk/client-ses": "^3.288.0",
     "@prisma/client": "^4.10.1",
     "bcrypt": "^5.1.0",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "express-handlebars": "^7.0.2",
     "jsonwebtoken": "^9.0.0",
     "nodemailer": "^6.9.1",
+    "nodemailer-express-handlebars": "^6.1.0",
     "prisma": "^4.10.1"
   },
   "devDependencies": {
@@ -28,8 +31,10 @@
     "@types/jsonwebtoken": "^9.0.1",
     "@types/node": "^18.14.1",
     "@types/nodemailer": "^6.4.7",
+    "@types/nodemailer-express-handlebars": "^4.0.2",
     "@types/validator": "^13.7.12",
     "concurrently": "^7.6.0",
+    "cpx": "^1.5.0",
     "nodemon": "^2.0.20",
     "typescript": "^4.9.5"
   }
