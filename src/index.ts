@@ -4,6 +4,7 @@ import AuthRouter from "./routers/auth";
 import CertificatesRouter from "./routers/certificates";
 import InfoRouter from "./routers/info";
 import { checkEnv } from "./lib/check-env";
+import { createPath } from "./lib/files";
 
 const isProduction = process.env["production"];
 checkEnv();
@@ -14,6 +15,7 @@ app.use(cors({origin: "*"}));
 app.use("/auth", AuthRouter);
 app.use("/certificates", CertificatesRouter);
 app.use("/info", InfoRouter);
+app.use("/storage/images", express.static(createPath("images")));
 
 app.get("/", (req, res) => {
 	res.send("Hello world");

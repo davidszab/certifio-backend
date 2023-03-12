@@ -3,15 +3,16 @@ import * as aws from "@aws-sdk/client-ses"
 import { getEmailMode } from "./check-env";
 import hbs from "nodemailer-express-handlebars";
 import {create} from "express-handlebars";
-
-const systemEmail = process.env["SYSTEM_EMAIL"];
+import { readOwnerInfo } from "./files";
 
 let transporter: nodemailer.Transporter;
 
 if(getEmailMode() == "SMTP"){
+	const systemEmail = process.env["SYSTEM_EMAIL"];
 	const smtpURL = process.env["SMTP_CONNECTION_URL"];
 	transporter = nodemailer.createTransport(smtpURL, {from: `"Certifio" <${systemEmail}>`});
 }else{
+	const systemEmail = process.env["SYSTEM_EMAIL"];
 	const ses = new aws.SES({
 		apiVersion: "2010-12-01",
 		region: process.env["AWS_REGION"],
@@ -32,19 +33,44 @@ transporter.use("compile", hbs({
 
 async function sendAuthenticationEmail(email: string, name: string, code: string, token: string){
 	const frontendURL = process.env["FRONTEND_URL"];
-	let info = await transporter.sendMail({
-		to: `${name} <${email}>`, // list of receivers
-		subject: "Certifio - Azonosítás", // Subject line
+	const systemEmail = process.env["SYSTEM_EMAIL"];
+	const owner = await readOwnerInfo();
+	await transporter.sendMail({
+		to: `${name} <${email}>`,
+		from: `${owner.name} <${systemEmail}>`,
+		subject: "Certifio - Azonosítás",
 		//@ts-ignore
 		template: "authentication",
 		context: {
 			name,
+			owner: owner.name,
 			code,
 			magicLink: `${frontendURL}/authentication?email=${email}&token=${token}`,
-			owner: "Tudod Nyelviskola",
-			site: "certifio.davidszabo.hu"
+			contactURL: `${frontendURL}/about?contact`
 		}
 	});
 }
 
-export {sendAuthenticationEmail};
+async function sendNewCertificateEmail(name: string, email: string, id: string, title: string, date: Date){
+	const frontendURL = process.env["FRONTEND_URL"];
+	const systemEmail = process.env["SYSTEM_EMAIL"];
+	const owner = await readOwnerInfo();
+	await transporter.sendMail({
+		to: `${name} <${email}>`,
+		from: `${owner.name} <${systemEmail}>`,
+		subject: "Certifio - Azonosítás",
+		//@ts-ignore
+		template: "certificate",
+		context: {
+			name,
+			owner: owner.name,
+			certificateURL: `${frontendURL}/c/${id}`,
+			title,
+			id,
+			date: date.toLocaleString("hu"),
+			contactURL: `${frontendURL}/about?contact`
+		}
+	});
+}
+
+export {sendAuthenticationEmail, sendNewCertificateEmail};

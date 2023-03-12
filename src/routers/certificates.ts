@@ -31,14 +31,15 @@ router.get("/:id", async (req, res) => {
 		certificate: {
 			id: certificate.id,
 			title: certificate.base.title,
-			date: certificate.date.toLocaleDateString("hu")
+			date: certificate.date.toLocaleDateString("hu", {year: "numeric", month: "long", day: "numeric"})
 		},
 		signatures: certificate.base.signers.map((e: any) => {
 			return {order: e.no, ...e.signature}
 		})
 	}
 	const template = await readFile(`${process.cwd()}/storage/templates/${certificate.base.template}/template.json`);
-	res.send({context, template: JSON.parse(template.toString())});
+	const data = JSON.parse(template.toString());
+	res.send({context, template: data.elements, frameColor: data.frameColor});
 });
 
 export default router;

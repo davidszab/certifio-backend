@@ -16,7 +16,7 @@ interface OwnerInfo {
 	};
 }
 
-function createPath(path: string) {
+export function createPath(path: string) {
 	return `${process.cwd()}/storage/${path}`;
 }
 
@@ -40,5 +40,5 @@ export async function readOwnerInfo(): Promise<OwnerInfo> {
 			}
 		} catch (err) {}
 	}
-	return { name: "[HIÁNYZÓ KONFIGURÁCIÓ]" };
+	return { name: "DEMO" };
 }
