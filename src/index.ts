@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import AuthRouter from "./routers/auth";
 import CertificatesRouter from "./routers/certificates";
+import InfoRouter from "./routers/info";
 import { checkEnv } from "./lib/check-env";
 
 const isProduction = process.env["production"];
@@ -12,6 +13,8 @@ app.use(express.json());
 app.use(cors({origin: "*"}));
 app.use("/auth", AuthRouter);
 app.use("/certificates", CertificatesRouter);
+app.use("/info", InfoRouter);
+
 app.get("/", (req, res) => {
 	res.send("Hello world");
 });
