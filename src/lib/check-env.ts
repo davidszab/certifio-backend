@@ -8,6 +8,7 @@ const variables: (string | EnvDef)[] = [
 	"DATABASE_URL",
 	"FRONTEND_URL",
 	"SYSTEM_EMAIL",
+	"JWT_SECRET",
 	{
 		key: "EMAIL_MODE",
 		values: ["AWS", "SMTP"]

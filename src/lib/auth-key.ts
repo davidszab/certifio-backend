@@ -31,7 +31,7 @@ async function getJWT({email, token, code}: validateAuthKeyParams){
 			if(token && await compare(token, last.tokenHash) || code && await compare(code, last.codeHash)){
 				await prisma.authKey.update({where: {id: last.id}, data: {hasBeenUsed: true}});
 				await prisma.$disconnect();
-				const jwt = sign({person: last.person}, "secret");
+				const jwt = sign({person: last.person}, process.env["JWT_SECRET"] as string);
 				return jwt;
 			}
 		}
